@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voice Converter</title>
+<style>
+:root{font-family:system-ui,sans-serif;color-scheme:dark;background:#101828;color:#edf2ff}*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:690px;margin:6vh auto;padding:30px;border:1px solid #31415d;border-radius:24px;background:#17243a}h1{margin:0 0 12px}p{line-height:1.5;color:#b9c6dd}.badge{color:#a1e8ce}button,.action{border:0;border-radius:12px;padding:13px 17px;background:#4bc6a4;color:#101828;font-weight:700;cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}.danger{background:#ff858e}section{padding:20px 0;border-top:1px solid #31415d}input,select{width:100%;padding:12px;background:#22334f;color:white;border:1px solid #465c7d;border-radius:10px}audio{width:100%;margin-top:12px}a{color:#7fedd0}.buttons{display:flex;gap:10px;flex-wrap:wrap}small{color:#b9c6dd}
+</style>
+</head>
+<body><main>
+<div class="badge">Protótipo • Windows e Android</div>
+<h1>Voice Converter</h1><p>Grave sua fala ou selecione um WAV. Converta usando um modelo vocal autorizado instalado no servidor.</p>
+<section><h2>1. Sua gravação</h2><div class="buttons"><button id="record">Gravar</button><button class="danger" id="stop" disabled>Parar</button></div><small id="recordStatus">Microfone pronto quando autorizado pelo navegador.</small><audio id="original" controls hidden></audio><p>Ou selecione um arquivo WAV PCM:</p><input id="file" type="file" accept=".wav,audio/wav"></section>
+<section><h2>2. Narrador de Torneio</h2><p id="engine">Consultando motor...</p><label for="preset">Expressividade</label><select id="preset"><option value="conversation">Conversação</option><option value="presentation" selected>Apresentação</option><option value="combat">Combate</option></select><p><button id="convert" disabled>Converter gravação</button></p><p id="status" role="status"></p></section>
+<section id="result" hidden><h2>3. Resultado</h2><audio id="converted" controls></audio><p><a id="download" download="voz-convertida.wav">Baixar WAV</a></p></section>
+<small>Versão inicial para testes. O efeito atual modifica a sonoridade por equalização e compressão; não cria uma nova identidade vocal. Nenhuma voz de pessoa real vem incluída.</small>
+</main><script src="/app.js"></script></body></html>
