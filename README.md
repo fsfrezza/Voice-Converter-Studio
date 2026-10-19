@@ -9,6 +9,21 @@ Conversor de gravações de voz para Windows e Android, com uma API única e mot
 - A versão Android nativa/instalável e a integração efetiva com um modelo RVC treinado ainda são etapas seguintes.
 - **O projeto não inclui um modelo da voz de Sílvio Luiz nem gravações protegidas.** Use apenas modelos e áudios que você tem autorização para utilizar. Identifique publicamente áudio sintético como tal.
 
+## Teste rápido no Windows (versão 0.1 experimental)
+
+1. Abra [Code → Download ZIP](https://github.com/fsfrezza/Voice-Converter-Studio/archive/refs/heads/main.zip) e extraia a pasta.
+2. Instale [Python 3.11+](https://www.python.org/downloads/windows/) com o Python Launcher habilitado, caso ainda não tenha.
+3. Clique duas vezes em `start-windows.bat`. Na primeira execução, aguarde as dependências serem instaladas.
+4. Abra `http://127.0.0.1:8765` se o navegador não abrir sozinho.
+5. Grave uma fala, pare a gravação, escolha Conversação / Apresentação / Combate e clique em **Converter gravação**.
+6. Ouça o resultado e baixe o WAV. Para fechar o servidor, pressione Ctrl+C na janela de comando.
+
+> **Limitação:** esta versão aplica equalização e dinâmica. Ela não substitui sua identidade vocal por outra voz neural.
+
+### Teste com Android
+
+A interface foi preparada para telas pequenas, mas ainda **não há APK**. Para usar o microfone em outro dispositivo, é preciso implantar o serviço de forma segura com HTTPS e autenticação. Não publique a API de desenvolvimento diretamente na internet. No Android, uma alternativa inicial é gravar o WAV pelo celular e transferi-lo ao Windows para converter.
+
 ## Executar
 
 Python 3.11+ recomendado:
