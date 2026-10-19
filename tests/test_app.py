@@ -37,3 +37,22 @@ def test_convert_and_download(tmp_path, monkeypatch):
     assert audio.status_code == 200
     with wave.open(io.BytesIO(audio.content), "rb") as wav:
         assert wav.getnframes() == 8000
+
+def test_combat_pitch_is_lowered(tmp_path):
+    import numpy as np
+    from scipy.io import wavfile
+    from app.voice_style import render
+
+    rate = 16000
+    t = np.arange(rate, dtype=np.float32) / rate
+    signal = np.round(np.sin(2 * np.pi * 220 * t) * 12000).astype(np.int16)
+    source = tmp_path / "tone.wav"
+    output = tmp_path / "shifted.wav"
+    wavfile.write(source, rate, signal)
+    render(source, output, "combat")
+    actual_rate, shifted = wavfile.read(output)
+    assert actual_rate == rate
+    assert shifted.shape == signal.shape
+    spectrum = np.abs(np.fft.rfft(shifted.astype(np.float64)))
+    dominant_hz = np.fft.rfftfreq(len(shifted), 1 / rate)[np.argmax(spectrum)]
+    assert 170 < dominant_hz < 200, f"Esperado tom mais grave, encontrado {dominant_hz} Hz"
