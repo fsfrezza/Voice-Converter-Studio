@@ -5,11 +5,12 @@ const sync = () => { $('convert').disabled = !recording; };
 
 fetch('/api/health').then(r => r.json()).then(data => {
   engine = data.engine;
-  $('engine').textContent = engine === 'passthrough'
-    ? 'Modo demonstração: sem alteração de timbre (modelo não configurado).'
-    : engine === 'announcer-dsp'
-    ? 'Efeito original de locução: equalização e compressão (ainda não é conversão neural).'
-    : 'Motor de conversão externo configurado.';
+  $('neuralStatus').textContent = data.neural_ready
+    ? 'Modelo neural pronto para conversão.'
+    : `Modelo neural indisponível: ${data.neural_message}`;
+  $('engine').textContent = data.neural_ready
+    ? 'RVC configurado. O modo automático usará a conversão neural.'
+    : 'Sem modelo neural: o modo automático usará o efeito DSP.';
 }).catch(() => setStatus('Servidor indisponível.'));
 
 function attach(blob) {
@@ -69,13 +70,13 @@ $('file').onchange = async e => {
 $('convert').onclick = async () => {
   $('convert').disabled = true; setStatus('Processando...');
   try {
-    const form = new FormData(); form.append('file', recording, 'gravacao.wav'); form.append('preset', $('preset').value);
+    const form = new FormData(); form.append('file', recording, 'gravacao.wav'); form.append('preset', $('preset').value); form.append('engine_mode', $('engineMode').value);
     const response = await fetch('/api/convert', {method: 'POST', body: form});
     const data = await response.json();
     if (!response.ok) throw new Error(data.detail || 'Falha na conversão');
     $('converted').src = data.audio_url; $('download').href = data.audio_url;
     $('result').hidden = false;
-    setStatus(data.engine === 'announcer-dsp' ? 'Efeito aplicado. A voz continua sendo sua, com sonoridade ajustada.' : 'Conversão concluída.');
+    setStatus(data.engine === 'rvc' ? 'Conversão neural RVC concluída.' : data.engine === 'announcer-dsp' ? 'Efeito DSP aplicado: sua identidade vocal permanece.' : 'Conversão externa concluída.');
   } catch(e) { setStatus(`Erro: ${e.message}`); }
   finally { sync(); }
 };
